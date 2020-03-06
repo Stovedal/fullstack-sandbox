@@ -8,7 +8,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ReceiptIcon from '@material-ui/icons/Receipt'
 import Typography from '@material-ui/core/Typography'
 import { ToDoListForm } from './ToDoListForm'
-
+import i18n from '../../localization'
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const getPersonalTodos = () => {
@@ -42,7 +42,7 @@ export const ToDoLists = ({ style }) => {
         <Typography
           component='h2'
         >
-          My ToDo Lists
+          {i18n.t('lists.title')}
         </Typography>
         <List>
           {Object.keys(toDoLists).map((key) => <ListItem

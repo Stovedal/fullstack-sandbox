@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography'
 import { TextField } from '../../shared/FormFields'
+import i18n from '../../localization'
 
 const useStyles = makeStyles({
   card: {
@@ -52,7 +53,7 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
                 {index + 1}
               </Typography>
               <TextField
-                label='What to do?'
+                label={i18n.t('tasks.addFormLabel')}
                 value={name}
                 onChange={event => {
                   setTodos([ // immutable update
@@ -86,10 +87,10 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
                 setTodos([...todos, ''])
               }}
             >
-              Add Todo <AddIcon />
+              {i18n.t('tasks.addButton')} <AddIcon />
             </Button>
             <Button type='submit' variant='contained' color='primary'>
-              Save
+              {i18n.t('general.save')}
             </Button>
           </CardActions>
         </form>
