@@ -5,9 +5,9 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ReceiptIcon from '@material-ui/icons/Receipt'
 import Typography from '@material-ui/core/Typography'
 import { ToDoListForm } from './ToDoListForm'
+import ListIcon from '@material-ui/icons/List';
 import i18n from '../../localization'
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -28,7 +28,10 @@ const getPersonalTodos = () => {
 
 export const ToDoLists = ({ style }) => {
   const [toDoLists, setToDoLists] = useState({})
-  const [activeList, setActiveList] = useState()
+  const [activeList, setActiveList] = useState('0000000002')
+
+  console.log(activeList);
+  
 
   useEffect(() => {
     getPersonalTodos()
@@ -44,17 +47,8 @@ export const ToDoLists = ({ style }) => {
         >
           {i18n.t('lists.title')}
         </Typography>
-        <List>
-          {Object.keys(toDoLists).map((key) => <ListItem
-            key={key}
-            button
-            onClick={() => setActiveList(key)}
-          >
-            <ListItemIcon>
-              <ReceiptIcon />
-            </ListItemIcon>
-            <ListItemText primary={toDoLists[key].title} />
-          </ListItem>)}
+        <List style={{display: "flex"}} >
+          {Object.keys(toDoLists).map((key) => <TodoList key={key} item={toDoLists[key]} selected={false} setSelected={() => setActiveList(key)}/>)}
         </List>
       </CardContent>
     </Card>
@@ -71,3 +65,18 @@ export const ToDoLists = ({ style }) => {
     />}
   </Fragment>
 }
+
+const TodoList = ({ item, selected, setSelected }) => {
+
+  return <ListItem
+    style={{ width: "20%"}}
+    button
+    onClick={() => setSelected()}
+  >
+  <ListItemIcon >
+  <ListIcon color={selected ? "secondary" : "inherit"}/>
+
+  </ListItemIcon>
+  <ListItemText primary={item.title} />
+</ListItem>
+} 

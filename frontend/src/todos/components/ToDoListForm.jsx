@@ -6,9 +6,12 @@ import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Typography from '@material-ui/core/Typography'
 import { TextField } from '../../shared/FormFields'
 import i18n from '../../localization'
+import Checkbox from '@material-ui/core/Checkbox';
+import TaskItem from './TaskItem'
 
 const useStyles = makeStyles({
   card: {
@@ -18,12 +21,6 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center'
   },
-  textField: {
-    flexGrow: 1
-  },
-  standardSpace: {
-    margin: '8px'
-  },
   form: {
     display: 'flex',
     flexDirection: 'column',
@@ -32,12 +29,29 @@ const useStyles = makeStyles({
 })
 
 export const ToDoListForm = ({ toDoList, saveToDoList }) => {
+
   const classes = useStyles()
   const [todos, setTodos] = useState(toDoList.todos)
+  const [selected, setSelected] = useState(null)
 
   const handleSubmit = event => {
     event.preventDefault()
     saveToDoList(toDoList.id, { todos })
+  }
+
+  const onTaskChange = (index, task) => {
+    setTodos([ // immutable update
+      ...todos.slice(0, index),
+      task,
+      ...todos.slice(index + 1)
+    ])
+  }
+
+  const onTaskDelete = (index) => {
+    setTodos([ // immutable delete
+      ...todos.slice(0, index),
+      ...todos.slice(index + 1)
+    ])
   }
 
   return (
@@ -47,38 +61,14 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
           {toDoList.title}
         </Typography>
         <form onSubmit={handleSubmit} className={classes.form}>
-          {todos.map((name, index) => (
-            <div key={index} className={classes.todoLine}>
-              <Typography className={classes.standardSpace} variant='h6'>
-                {index + 1}
-              </Typography>
-              <TextField
-                label={i18n.t('tasks.addFormLabel')}
-                value={name}
-                onChange={event => {
-                  setTodos([ // immutable update
-                    ...todos.slice(0, index),
-                    event.target.value,
-                    ...todos.slice(index + 1)
-                  ])
-                }}
-                className={classes.textField}
-              />
-              <Button
-                size='small'
-                color='secondary'
-                className={classes.standardSpace}
-                onClick={() => {
-                  setTodos([ // immutable delete
-                    ...todos.slice(0, index),
-                    ...todos.slice(index + 1)
-                  ])
-                }}
-              >
-                <DeleteIcon />
-              </Button>
-            </div>
-          ))}
+          {todos.map((task, index) => <TaskItem
+            task={task}
+            index={index}
+            selected={selected==index}
+            onClick={() => setSelected(index)}
+            onChange={(index, task) => onTaskChange(index, task)}
+            onDelete={(index) => onTaskDelete(index)}
+          />)}
           <CardActions>
             <Button
               type='button'
@@ -98,3 +88,5 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
     </Card>
   )
 }
+
+
