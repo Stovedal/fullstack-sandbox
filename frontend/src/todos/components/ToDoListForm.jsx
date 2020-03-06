@@ -65,6 +65,7 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
             task={task}
             index={index}
             selected={selected==index}
+            setSelected={(index) => setSelected(index)}
             onClick={() => setSelected(index)}
             onChange={(index, task) => onTaskChange(index, task)}
             onDelete={(index) => onTaskDelete(index)}
@@ -74,7 +75,7 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
               type='button'
               color='primary'
               onClick={() => {
-                setTodos([...todos, ''])
+                setTodos([...todos, {}])
               }}
             >
               {i18n.t('tasks.addButton')} <AddIcon />

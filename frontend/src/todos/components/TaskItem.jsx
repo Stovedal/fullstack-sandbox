@@ -3,6 +3,9 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
+import ListItemText from '@material-ui/core/ListItemText'
+import ListItem from '@material-ui/core/ListItem'
+
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { TextField } from '../../shared/FormFields'
@@ -29,33 +32,45 @@ const useStyles = makeStyles({
     margin: '1rem'
   }
 })
-const TaskItem = ({ index, selected, task, onClick, onChange, onDelete }) => {
+
+const TaskItem = ({ index, selected, setSelected, task, onClick, onChange, onDelete }) => {
 
 	const classes = useStyles()
   
-	return <div key={index} className={classes.todoLine}>
+	return <ListItem onClick={() => setSelected(index)} key={index} className={classes.todoLine}>
 		<Checkbox
-		className={classes.checkbox}
-		edge="start"
-		/>
+			className={classes.checkbox}
+			edge="start"
+			onChange={() => {
+				task.completed = !task.completed
+				onChange(index, task)
+			}}
+			/>{
+				(selected) ?
 		<TextField
-		label={i18n.t('tasks.addFormLabel')}
-		value={task}
-		onChange={event => {
-			task = event.target.value
-			onChange(task, index)
-		}}
-		className={classes.textField}
-		/>
+			label={i18n.t('tasks.addFormLabel')}
+			value={task.text}
+			onChange={event => {
+				task.text = event.target.value
+				onChange(index, task)
+			}}
+			className={classes.textField}
+			/>:
+			<ListItemText
+				className={classes.textField}
+			>
+				{task.text}
+			</ListItemText>
+			}
 		<Button
-		size='small'
-		color='secondary'
-		className={classes.standardSpace}
-		onClick={() => onDelete(index)}
-		>
-		<DeleteIcon />
+			size='small'
+			color='secondary'
+			className={classes.standardSpace}
+			onClick={() => onDelete(index)}
+			>
+			<DeleteIcon />
 		</Button>
-	</div>
+	</ListItem>
 }
 
 export default TaskItem

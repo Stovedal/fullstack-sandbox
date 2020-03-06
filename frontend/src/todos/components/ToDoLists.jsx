@@ -16,12 +16,21 @@ const getPersonalTodos = () => {
     '0000000001': {
       id: '0000000001',
       title: 'First List',
-      todos: ['First todo of first list!']
+      todos: [{
+        id: 'task1',
+        text: 'First todo of first list!',
+        completed: false
+      }]
     },
     '0000000002': {
       id: '0000000002',
       title: 'Second List',
-      todos: ['First todo of second list!']
+      todos: [{
+          id: 'task1',
+          text: 'First todo of first list!',
+          completed: false
+        }
+      ]
     }
   }))
 }
@@ -67,16 +76,13 @@ export const ToDoLists = ({ style }) => {
 }
 
 const TodoList = ({ item, selected, setSelected }) => {
-
   return <ListItem
-    style={{ width: "20%"}}
     button
     onClick={() => setSelected()}
   >
   <ListItemIcon >
   <ListIcon color={selected ? "secondary" : "inherit"}/>
-
   </ListItemIcon>
-  <ListItemText primary={item.title} />
+  <ListItemText>{item.title}</ListItemText> 
 </ListItem>
 } 
