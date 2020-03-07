@@ -1,17 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
-import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Typography from '@material-ui/core/Typography'
-import { TextField } from '../../shared/FormFields'
 import i18n from '../../localization'
-import Checkbox from '@material-ui/core/Checkbox';
-import TaskItem from './TaskItem'
+import TodoItem from './TodoItem'
+import api from '../../api'
 
 const useStyles = makeStyles({
   card: {
@@ -28,26 +25,31 @@ const useStyles = makeStyles({
   }
 })
 
-export const ToDoListForm = ({ toDoList, saveToDoList }) => {
+export const TodoList = ({ list }) => {
 
   const classes = useStyles()
-  const [todos, setTodos] = useState(toDoList.todos)
+  const [todos, setTodos] = useState([])
   const [selected, setSelected] = useState(null)
+
+  useEffect(() => {
+    api.getTodosByListId(list.id)
+      .then(setTodos)
+  })
 
   const handleSubmit = event => {
     event.preventDefault()
-    saveToDoList(toDoList.id, { todos })
+    //saveToDoList(list.id, { todos })
   }
 
-  const onTaskChange = (index, task) => {
+  const onTodoChange = (index, todo) => {
     setTodos([ // immutable update
       ...todos.slice(0, index),
-      task,
+      todo,
       ...todos.slice(index + 1)
     ])
   }
 
-  const onTaskDelete = (index) => {
+  const onTodoDelete = (index) => {
     setTodos([ // immutable delete
       ...todos.slice(0, index),
       ...todos.slice(index + 1)
@@ -58,17 +60,17 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
     <Card className={classes.card}>
       <CardContent>
         <Typography component='h2'>
-          {toDoList.title}
+          {list.name}
         </Typography>
         <form onSubmit={handleSubmit} className={classes.form}>
-          {todos.map((task, index) => <TaskItem
-            task={task}
+          {todos.map((todo, index) => <TodoItem
+            todo={todo}
             index={index}
             selected={selected==index}
             setSelected={(index) => setSelected(index)}
             onClick={() => setSelected(index)}
-            onChange={(index, task) => onTaskChange(index, task)}
-            onDelete={(index) => onTaskDelete(index)}
+            onChange={(index, todo) => onTodoChange(index, todo)}
+            onDelete={(index) => onTodoDelete(index)}
           />)}
           <CardActions>
             <Button
@@ -78,7 +80,7 @@ export const ToDoListForm = ({ toDoList, saveToDoList }) => {
                 setTodos([...todos, {}])
               }}
             >
-              {i18n.t('tasks.addButton')} <AddIcon />
+              {i18n.t('todos.addButton')} <AddIcon />
             </Button>
             <Button type='submit' variant='contained' color='primary'>
               {i18n.t('general.save')}

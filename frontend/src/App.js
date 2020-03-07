@@ -7,7 +7,6 @@ import { ToDoLists } from './todos/components/ToDoLists'
 import i18n from './localization'
 import { ThemeProvider } from '@material-ui/core/styles';
 import { mainTheme } from './themes'
-import api from './api'
 
 const MainAppBar = () => {
   

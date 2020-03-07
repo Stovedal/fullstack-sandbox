@@ -33,8 +33,9 @@ const useStyles = makeStyles({
   }
 })
 
-const TaskItem = ({ index, selected, setSelected, task, onClick, onChange, onDelete }) => {
+const TodoItem = ({ index, selected, setSelected, todo, onClick, onChange, onDelete }) => {
 
+	
 	const classes = useStyles()
   
 	return <ListItem onClick={() => setSelected(index)} key={index} className={classes.todoLine}>
@@ -42,24 +43,24 @@ const TaskItem = ({ index, selected, setSelected, task, onClick, onChange, onDel
 			className={classes.checkbox}
 			edge="start"
 			onChange={() => {
-				task.completed = !task.completed
-				onChange(index, task)
+				todo.completed = !todo.completed
+				onChange(index, todo)
 			}}
 			/>{
 				(selected) ?
 		<TextField
-			label={i18n.t('tasks.addFormLabel')}
-			value={task.text}
+			label={i18n.t('todos.addFormLabel')}
+			value={todo.text}
 			onChange={event => {
-				task.text = event.target.value
-				onChange(index, task)
+				todo.text = event.target.value
+				onChange(index, todo)
 			}}
 			className={classes.textField}
 			/>:
 			<ListItemText
 				className={classes.textField}
 			>
-				{task.text}
+				{todo.text}
 			</ListItemText>
 			}
 		<Button
@@ -73,4 +74,4 @@ const TaskItem = ({ index, selected, setSelected, task, onClick, onChange, onDel
 	</ListItem>
 }
 
-export default TaskItem
+export default TodoItem

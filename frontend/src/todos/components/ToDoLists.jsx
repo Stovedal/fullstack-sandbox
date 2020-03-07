@@ -6,47 +6,24 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Typography from '@material-ui/core/Typography'
-import { ToDoListForm } from './ToDoListForm'
+import { TodoList } from './TodoList'
 import ListIcon from '@material-ui/icons/List';
 import i18n from '../../localization'
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+import api from '../../api'
 
-const getPersonalTodos = () => {
-  return sleep(1000).then(() => Promise.resolve({
-    '0000000001': {
-      id: '0000000001',
-      title: 'First List',
-      todos: [{
-        id: 'task1',
-        text: 'First todo of first list!',
-        completed: false
-      }]
-    },
-    '0000000002': {
-      id: '0000000002',
-      title: 'Second List',
-      todos: [{
-          id: 'task1',
-          text: 'First todo of first list!',
-          completed: false
-        }
-      ]
-    }
-  }))
-}
 
 export const ToDoLists = ({ style }) => {
-  const [toDoLists, setToDoLists] = useState({})
-  const [activeList, setActiveList] = useState('0000000002')
 
-  console.log(activeList);
-  
+  const [toDoLists, setToDoLists] = useState({})
+  const [selectedList, setSelectedList] = useState(null)
 
   useEffect(() => {
-    getPersonalTodos()
+    api.getLists()
       .then(setToDoLists)
   }, [])
 
+  console.log(toDoLists);
+  
   if (!Object.keys(toDoLists).length) return null
   return <Fragment>
     <Card style={style}>
@@ -56,26 +33,21 @@ export const ToDoLists = ({ style }) => {
         >
           {i18n.t('lists.title')}
         </Typography>
-        <List style={{display: "flex"}} >
-          {Object.keys(toDoLists).map((key) => <TodoList key={key} item={toDoLists[key]} selected={false} setSelected={() => setActiveList(key)}/>)}
+        <List>
+        {toDoLists.map((list) => <TodoListButton
+          list={list}
+          selected={selectedList == list}
+          setSelected={() => setSelectedList(list)}
+        />)}
         </List>
       </CardContent>
     </Card>
-    {toDoLists[activeList] && <ToDoListForm
-      key={activeList} // use key to make React recreate component to reset internal state
-      toDoList={toDoLists[activeList]}
-      saveToDoList={(id, { todos }) => {
-        const listToUpdate = toDoLists[id]
-        setToDoLists({
-          ...toDoLists,
-          [id]: { ...listToUpdate, todos }
-        })
-      }}
-    />}
+    {(selectedList) ? <TodoList list={selectedList}/> : null}
   </Fragment>
 }
+// {Object.keys(toDoLists).map((key) => <TodoList key={key} list={toDoLists[key]} selected={false} setSelected={() => setActiveList(key)}/>)}
 
-const TodoList = ({ item, selected, setSelected }) => {
+const TodoListButton = ({ list, selected, setSelected }) => {  
   return <ListItem
     button
     onClick={() => setSelected()}
@@ -83,6 +55,6 @@ const TodoList = ({ item, selected, setSelected }) => {
   <ListItemIcon >
   <ListIcon color={selected ? "secondary" : "inherit"}/>
   </ListItemIcon>
-  <ListItemText>{item.title}</ListItemText> 
+  <ListItemText>{list.name}</ListItemText> 
 </ListItem>
 } 
