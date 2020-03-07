@@ -7,8 +7,10 @@ import { ToDoLists } from './todos/components/ToDoLists'
 import i18n from './localization'
 import { ThemeProvider } from '@material-ui/core/styles';
 import { mainTheme } from './themes'
+import api from './api'
 
 const MainAppBar = () => {
+  
   return <AppBar position='static' color='primary'>
     <Toolbar>
       <Typography variant='h6' color='inherit'>
@@ -35,6 +37,7 @@ const MainWrapper = ({ children }) => {
 
 class App extends Component {
   render () {
+
     return <ThemeProvider theme={mainTheme}>
       <MainWrapper>
         <ToDoLists
