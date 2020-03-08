@@ -13,8 +13,7 @@ module.exports = (app, db_client) => {
 	}
 	
 	// Get all lists
-	app.get("/lists", (req, res) => {
-		
+	app.get(listsPath, (req, res) => {		
 		db_client.query(listsQueries.getLists, (db_err, db_res) => {
 			if (db_err) {
 				res.send(db_err)
