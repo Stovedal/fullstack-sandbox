@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import i18n from '../../localization'
 import TodoItem from './TodoItem'
 import api from '../../api'
+import AddButton from './AddButton'
 
 const useStyles = makeStyles({
   card: {
@@ -33,8 +34,11 @@ export const TodoList = ({ list }) => {
 
   useEffect(() => {
     api.getTodosByListId(list.id)
-      .then(setTodos)
-  })
+      .then((data) => {
+        console.log("Getting list")
+        setTodos(data)
+      })
+  },[])
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -73,18 +77,11 @@ export const TodoList = ({ list }) => {
             onDelete={(index) => onTodoDelete(index)}
           />)}
           <CardActions>
-            <Button
-              type='button'
-              color='primary'
+            <AddButton
+              label={i18n.t('todos.addButton')}
               onClick={() => {
                 setTodos([...todos, {}])
-              }}
-            >
-              {i18n.t('todos.addButton')} <AddIcon />
-            </Button>
-            <Button type='submit' variant='contained' color='primary'>
-              {i18n.t('general.save')}
-            </Button>
+              }}/>
           </CardActions>
         </form>
       </CardContent>

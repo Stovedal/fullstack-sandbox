@@ -10,13 +10,13 @@ i18next
     resources: {
       en: {
         translation: {
-			title: "Classic Todo App",
+			title: "Sellpy Todo App",
 			lists: {
 				title: "Lists",
 				add: "Add list"
 				},
-			tasks: {
-				addButton: "Add Task",
+			todos: {
+				addButton: "Add Todo",
 				addFormLabel: "What do you want to do?",
 				clearFinished: "Clear finished",
 			},
@@ -35,9 +35,9 @@ i18next
 				title: "Listor",
 				addButton: "Lägg till lista"
 				},
-			tasks: {
+			todos: {
 				addButton: "Lägg till uppgift",
-				addFormLabel: "Vad vill du gö?",
+				addFormLabel: "Vad vill du göra?",
 				clearFinished: "Rensa avklarade",
 			},
 			general: {

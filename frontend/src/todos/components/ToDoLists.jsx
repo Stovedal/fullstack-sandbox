@@ -2,28 +2,35 @@ import React, { Fragment, useState, useEffect } from 'react'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Typography from '@material-ui/core/Typography'
 import { TodoList } from './TodoList'
-import ListIcon from '@material-ui/icons/List';
 import i18n from '../../localization'
 import api from '../../api'
-
+import { CardActions } from '@material-ui/core'
+import AddButton from './AddButton'
+import ToggleButton from './ToggleButton'
 
 export const ToDoLists = ({ style }) => {
 
   const [toDoLists, setToDoLists] = useState({})
-  const [selectedList, setSelectedList] = useState(null)
+  const [displayedLists, setDisplayedLists] = useState([])
 
   useEffect(() => {
     api.getLists()
       .then(setToDoLists)
   }, [])
 
-  console.log(toDoLists);
-  
+
+  const toggleDisplayedList = (list) => {
+    if(!displayedLists.includes(list)) {
+      // Show list
+      setDisplayedLists(displayedLists.concat(list))
+    } else {
+      // Hide list
+      setDisplayedLists(displayedLists.filter((item) => item.id !== list.id))
+    }
+  }
+
   if (!Object.keys(toDoLists).length) return null
   return <Fragment>
     <Card style={style}>
@@ -34,27 +41,19 @@ export const ToDoLists = ({ style }) => {
           {i18n.t('lists.title')}
         </Typography>
         <List>
-        {toDoLists.map((list) => <TodoListButton
-          list={list}
-          selected={selectedList == list}
-          setSelected={() => setSelectedList(list)}
+        {toDoLists.map((list, index) => <ToggleButton
+          key={index}
+          label={list.name}
+          active={displayedLists.includes(list)}
+          onToggle={() => toggleDisplayedList(list)}
         />)}
         </List>
+        <CardActions>
+      <AddButton label={i18n.t('lists.add')} onClick={() => {}} />
+    </CardActions>
       </CardContent>
     </Card>
-    {(selectedList) ? <TodoList list={selectedList}/> : null}
+    {displayedLists.map((list,index) => <TodoList key={index} list={list}/>)}
   </Fragment>
 }
-// {Object.keys(toDoLists).map((key) => <TodoList key={key} list={toDoLists[key]} selected={false} setSelected={() => setActiveList(key)}/>)}
 
-const TodoListButton = ({ list, selected, setSelected }) => {  
-  return <ListItem
-    button
-    onClick={() => setSelected()}
-  >
-  <ListItemIcon >
-  <ListIcon color={selected ? "secondary" : "inherit"}/>
-  </ListItemIcon>
-  <ListItemText>{list.name}</ListItemText> 
-</ListItem>
-} 

@@ -35,7 +35,6 @@ const useStyles = makeStyles({
 
 const TodoItem = ({ index, selected, setSelected, todo, onClick, onChange, onDelete }) => {
 
-	
 	const classes = useStyles()
   
 	return <ListItem onClick={() => setSelected(index)} key={index} className={classes.todoLine}>
