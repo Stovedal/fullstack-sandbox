@@ -3,12 +3,11 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
-import { TodoList } from './TodoList'
+import { ToDoList } from './ToDoList'
 import i18n from '../../localization'
 import api from '../../api'
 import { CardActions } from '@material-ui/core'
-import AddButton from './AddButton'
-import ToggleButton from './ToggleButton'
+import ToggleButton from '../../shared/buttons/ToggleButton'
 
 export const ToDoLists = ({ style }) => {
 
@@ -49,11 +48,10 @@ export const ToDoLists = ({ style }) => {
         />)}
         </List>
         <CardActions>
-      <AddButton label={i18n.t('lists.add')} onClick={() => {}} />
     </CardActions>
       </CardContent>
     </Card>
-    {displayedLists.map((list,index) => <TodoList key={index} list={list}/>)}
+    {displayedLists.map((list,index) => <ToDoList key={index} list={list}/>)}
   </Fragment>
 }
 

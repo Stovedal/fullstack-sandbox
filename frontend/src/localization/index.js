@@ -3,7 +3,6 @@ import i18next from 'i18next';
 i18next
   .init({
     interpolation: {
-      // React already does escaping
       escapeValue: false,
     },
     lng: 'en',
@@ -15,10 +14,11 @@ i18next
 				title: "Lists",
 				add: "Add list"
 				},
-			todos: {
+			toDos: {
 				addButton: "Add Todo",
 				addFormLabel: "What do you want to do?",
 				clearFinished: "Clear finished",
+				noText: "Enter task"
 			},
 			general: {
 				remove: "Remove",
@@ -35,10 +35,11 @@ i18next
 				title: "Listor",
 				addButton: "Lägg till lista"
 				},
-			todos: {
+			toDos: {
 				addButton: "Lägg till uppgift",
 				addFormLabel: "Vad vill du göra?",
 				clearFinished: "Rensa avklarade",
+				noText: "Skriv uppgift"
 			},
 			general: {
 				remove: "Ta bort",

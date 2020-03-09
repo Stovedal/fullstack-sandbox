@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 // Config
 
 const api = axios.create({
@@ -6,7 +7,7 @@ const api = axios.create({
 });
 
 const paths = {
-	todos: "todos/",
+	toDos: "todos/",
 	lists: "lists/"
 }
 
@@ -19,55 +20,79 @@ const getLists = async () => {
 		return response.data
 	} catch (error) {
 		console.log(error)
+		return false
 	}
 }
 
-// Add list
+// Add list ( Not used, redundant )
 const addList = async (name) => {
 	try {
 		const response = await api.post(paths.lists, { "name": name })
 		return response.data
 	} catch (error) {
 		console.log(error)
+		return false
 	}
 }
 
-// Delete list
+// Delete list ( Not used, redundant )
 const deleteList = async (id) => {
 	try {
 		await api.delete(paths.lists, { params: { "id": id } })
 	} catch (error) {
 		console.log(error)
+		return false
 	}
 }
 
-// Todos
+// ToDos
 
-// Get todos by list id
-const getTodosByListId = async (listId) => {
+// Get toDos by list id
+const getToDosByList = async (list) => {
 	try {
-		const response = await api.get(paths.todos, { params: { "list_id": listId } })
+		const response = await api.get(paths.toDos, { params: { "list_id": list.id } })
 		return response.data
 	} catch (error) {
 		console.log(error)
-	}
-}
-// Add todo
-const addTodo = async (todo) => {
-	try {
-		const response = await api.post(paths.todos, todo)
-		return response.data
-	} catch (error) {
-		console.log(error)
+		return false
 	}
 }
 
-// Delete todo
-const deleteTodo = async (todoId) => {
+// Add toDo
+const addToDo = async (list) => {
 	try {
-		await api.delete(paths.todos, { params: { "id": todoId } })
+		const toDo = {
+			list_id: list.id,
+			text: "",
+			timestamp: new Date(Date.now()).toISOString()
+		}
+		const response = await api.post(paths.toDos, toDo)
+		return response.data
 	} catch (error) {
 		console.log(error)
+		return false
+	}
+}
+
+// Delete toDo
+const deleteToDo = async (toDo) => {
+	try {
+		await api.delete(paths.toDos, { params: { "id": toDo.id } })
+		return true
+	} catch (error) {
+		console.log(error)
+		return false
+	}
+}
+
+// Edit toDo
+const editToDo = async (toDo) => {
+	try {
+		const res =  await api.put(paths.toDos, toDo)		
+		return res.data[0]
+	} catch (error) {
+		console.log(error)
+		return false
 	}
 }
 
@@ -75,7 +100,8 @@ export default {
 	getLists,
 	addList,
 	deleteList,
-	getTodosByListId,
-	addTodo,
-	deleteTodo
+	getToDosByList,
+	addToDo,
+	deleteToDo,
+	editToDo
 }

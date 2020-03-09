@@ -9,7 +9,6 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { mainTheme } from './themes'
 
 const MainAppBar = () => {
-  
   return <AppBar position='static' color='primary'>
     <Toolbar>
       <Typography variant='h6' color='inherit'>
@@ -36,7 +35,6 @@ const MainWrapper = ({ children }) => {
 
 class App extends Component {
   render () {
-
     return <ThemeProvider theme={mainTheme}>
       <MainWrapper>
         <ToDoLists
