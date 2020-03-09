@@ -3,23 +3,23 @@ utilities = require('../../utilities')
 
 module.exports = (app, db_client) => {
 
-	// Todos
+	// ToDos
 
-	todosPath = '/todos'
+	toDosPath = '/todos'
 
-	todosQueries = {
-		getTodos: "SELECT * FROM public.todos WHERE public.todos.list_id=$1",
-		addTodo: "INSERT INTO public.todos(timestamp, text, list_id) VALUES($1, $2, $3) RETURNING *",
-		deleteTodo: "DELETE FROM public.todos WHERE id=$1",
-		editTodo: "UPDATE public.todos SET text=$2, completed=$3 WHERE id=$1 RETURNING *"
+	toDosQueries = {
+		getToDos: "SELECT * FROM public.todos WHERE public.todos.list_id=$1",
+		addToDo: "INSERT INTO public.todos(timestamp, text, list_id) VALUES($1, $2, $3) RETURNING *",
+		deleteToDo: "DELETE FROM public.todos WHERE id=$1",
+		editToDo: "UPDATE public.todos SET text=$2, completed=$3 WHERE id=$1 RETURNING *"
 	}
 
 	
 
 	// Get todos by list id
-	app.get(todosPath, (req, res) => {
+	app.get(toDosPath, (req, res) => {
 		
-		query = utilities.withValue(todosQueries.getTodos, req.query.list_id)
+		query = utilities.withValue(toDosQueries.getToDos, req.query.list_id)
 
 		db_client.query(query, (db_err, db_res) => {
 			if (db_err) {
@@ -31,9 +31,9 @@ module.exports = (app, db_client) => {
 	})
 
 	// Add new todo
-	app.post(todosPath, (req, res) => {
+	app.post(toDosPath, (req, res) => {
 		
-		query = utilities.withValue(todosQueries.addTodo, [req.body.timestamp, req.body.text, req.body.list_id] )		
+		query = utilities.withValue(toDosQueries.addToDo, [req.body.timestamp, req.body.text, req.body.list_id] )		
 
 		db_client.query(query, (db_err, db_res) => {
 			if (db_err) {
@@ -45,10 +45,10 @@ module.exports = (app, db_client) => {
 	})
 
 	// Edit todo
-	app.put(todosPath, (req, res) => {
+	app.put(toDosPath, (req, res) => {
 		
-		query = utilities.withValue(todosQueries.editTodo, [req.body.id, req.body.text, req.body.completed])
-
+		query = utilities.withValue(toDosQueries.editToDo, [req.body.id, req.body.text, req.body.completed])
+		
 		db_client.query(query, (db_err, db_res) => {
 			if (db_err) {
 				res.send(db_err.stack)
@@ -59,10 +59,10 @@ module.exports = (app, db_client) => {
 	})
 
 	// Delete todo
-	app.delete(todosPath, (req, res) => {
+	app.delete(toDosPath, (req, res) => {
 
-		query = utilities.withValue(todosQueries.deleteTodo, req.query.id) 
-
+		query = utilities.withValue(toDosQueries.deleteToDo, req.query.id) 
+		
 		db_client.query(query, (db_err, db_res) => {
 			if (db_err) {
 				res.send(db_err)
